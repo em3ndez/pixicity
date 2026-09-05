@@ -18,7 +18,7 @@
       <small>
         <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
           <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
-            matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
+            matTooltipPosition="left" alt="{{post.categoria.nombre}}" loading="lazy"/>
             <span class="ms-1" matTooltip="{{post.titulo}}">{{post.titulo | truncate:[40]}}</span>
           </a>
         </small>

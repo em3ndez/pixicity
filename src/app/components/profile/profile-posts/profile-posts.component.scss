@@ -1,0 +1,21 @@
+
+.seo-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin: 8px 0 16px;
+
+  a {
+    padding: 4px 10px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 4px;
+    font-size: 13px;
+    text-decoration: none;
+
+    &[aria-current='page'] {
+      font-weight: 600;
+      border-color: currentColor;
+    }
+  }
+}

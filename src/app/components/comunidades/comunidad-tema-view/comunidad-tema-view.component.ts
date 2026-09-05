@@ -77,6 +77,16 @@ export class ComunidadTemaViewComponent implements OnInit {
         this.construirArbol();
         this.loading = false;
 
+        const rutaCanonica = this.router
+          .createUrlTree(['/comunidades', this.tema.comunidad?.nombreCorto, 'tema', this.tema.id, this.tema.url])
+          .toString();
+
+        if (decodeURIComponent(location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
+          // Mismo problema que en posts: el tema se resuelve por id.
+          this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
+          return;
+        }
+
         const limpio = (this.tema.contenido || '').replace(/<[^>]*>/g, '').trim();
         this.seoService.setSEO({
           title: this.tema.titulo || this.tema.nombre,
@@ -84,9 +94,66 @@ export class ComunidadTemaViewComponent implements OnInit {
           type: 'article',
           imageURL: this.tema.imagen || '',
           tags: [this.tema.titulo, this.tema.comunidad?.nombre, 'comunidad', 'taringas'].filter(Boolean),
+          canonical: `${location.origin}${rutaCanonica}`,
+          publishedTime: this.tema.fechaRegistro,
+          modifiedTime: this.tema.fechaActualiza ?? this.tema.fechaRegistro,
+          author: this.tema.usuario?.userName,
+          section: this.tema.comunidad?.nombre,
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@graph': [{
+            '@type': 'DiscussionForumPosting',
+            headline: this.tema.titulo,
+            text: limpio ? limpio.substring(0, 500) : undefined,
+            datePublished: this.tema.fechaRegistro,
+            dateModified: this.tema.fechaActualiza ?? this.tema.fechaRegistro,
+            image: this.tema.imagen || undefined,
+            author: {
+              '@type': 'Person',
+              name: this.tema.usuario?.userName ?? 'Taringa!',
+            },
+            publisher: { '@id': `${location.origin}/#organization` },
+            mainEntityOfPage: { '@type': 'WebPage', '@id': `${location.origin}${location.pathname}` },
+            commentCount: (this.tema.comentarios ?? []).length,
+            isPartOf: {
+              '@type': 'WebSite',
+              '@id': `${location.origin}/#website`,
+              name: this.tema.comunidad?.nombre,
+            },
+          }, {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
+              { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${location.origin}/comunidades` },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: this.tema.comunidad?.nombre,
+                item: `${location.origin}/comunidades/${this.tema.comunidad?.nombreCorto ?? ''}`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 4,
+                name: this.tema.titulo,
+                item: `${location.origin}${location.pathname}`,
+              },
+            ],
+          }],
+          },
         });
       },
-      error: () => { this.loading = false; this.router.navigate(['/comunidades', this.slug]); },
+      error: () => {
+        this.loading = false;
+        this.seoService.setSEO({
+          title: 'Tema no encontrado',
+          description: 'Este tema no existe o fue eliminado.',
+          type: 'website',
+          imageURL: '',
+          tags: [],
+          noIndex: true,
+          statusCode: 404,
+        });
+      },
     });
   }
 

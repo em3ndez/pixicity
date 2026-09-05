@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -23,8 +24,18 @@ export class TopsComponent implements OnInit {
     private httpParametrosService: IHttpParametrosService,
     private displayService: DisplayComponentService,
     private postService: IHttpPostsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private seoService: SEOService
   ) {
+    this.seoService.setSEO({
+      title: 'Tops | Los mejores posts de Taringa',
+      description:
+        'Ranking de los posts más votados de Taringa: filtrá por categoría y por período para ver lo mejor de la comunidad.',
+      type: 'website',
+      imageURL: '',
+      tags: ['tops', 'mejores posts', 'ranking', 'taringa'],
+    });
+
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

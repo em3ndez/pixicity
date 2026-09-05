@@ -9,11 +9,11 @@
       <div class="col-12 col-sm-12 col-md-7">
         @if (post.sticky) {
           <img width="16" height="16" src="/assets/images/categorias/sticky.png" class="sticky-post--home"
-            matTooltip="Post fijado por el Staff" matTooltipPosition="left" alt="Sticky" />
+            matTooltip="Post fijado por el Staff" matTooltipPosition="left" alt="Sticky" loading="lazy"/>
         }
         <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
           <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}"
-            matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
+            matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left" alt="{{post.categoria.nombre}}" loading="lazy"/>
             &nbsp;
             <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo}}</span>
           </a>
@@ -38,7 +38,7 @@
             <a [ngClass]="{'post-privado': post.esPrivado}"
               [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
               <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
-                matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
+                matTooltipPosition="left" alt="{{post.categoria.nombre}}" loading="lazy"/>
                 &nbsp;
                 <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo | truncate:[52]}}</span>
               </a>
@@ -58,7 +58,27 @@
 
         <div class="row">
           <div class="col-12">
-            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" [pageIndex]="pageIndex"
+              (page)="pageChange($event)">
             </mat-paginator>
+
+            <!-- Paginacion rastreable: mat-paginator son botones sin href y
+                 Googlebot no los sigue, asi que el listado viejo quedaba huerfano. -->
+            <nav class="seo-pagination" aria-label="Paginación">
+              @if (pageIndex > 0) {
+                <a [routerLink]="[]" [queryParams]="queryParamsPara(pageIndex)" queryParamsHandling="merge"
+                  rel="prev">Anterior</a>
+              }
+
+              @for (p of paginasVisibles; track p) {
+                <a [routerLink]="[]" [queryParams]="queryParamsPara(p)" queryParamsHandling="merge"
+                  [attr.aria-current]="p === pageIndex + 1 ? 'page' : null">{{ p }}</a>
+              }
+
+              @if (pageIndex + 1 < totalPaginas) {
+                <a [routerLink]="[]" [queryParams]="queryParamsPara(pageIndex + 2)" queryParamsHandling="merge"
+                  rel="next">Siguiente</a>
+              }
+            </nav>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
+import { SEOService } from 'src/app/services/shared/seo.service';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -33,10 +34,21 @@ export class SearchComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
-    private title: Title
+    private title: Title,
+    private seoService: SEOService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
-    this.title.setTitle(`Buscador! | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`);
+
+    // Cada busqueda genera una URL propia: indexarlas es contenido pobre
+    // infinito que se come el presupuesto de rastreo.
+    this.seoService.setSEO({
+      title: 'Buscador',
+      description: 'Buscá posts, usuarios y comunidades en Taringa.',
+      type: 'website',
+      imageURL: '',
+      tags: [],
+      noIndex: true,
+    });
 
     this.displayService.setDisplay({
       mainMenu: true,

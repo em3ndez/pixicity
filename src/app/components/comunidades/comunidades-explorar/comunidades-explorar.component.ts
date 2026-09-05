@@ -1,8 +1,10 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -27,15 +29,34 @@ export class ComunidadesExplorarComponent implements OnInit {
   constructor(
     private displayService: DisplayComponentService,
     private comunidadesService: IHttpComunidadesService,
-    private securityService: IHttpSecurityService
+    private securityService: IHttpSecurityService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private seoService: SEOService
   ) {
+    this.seoService.setSEO({
+      title: 'Explorar comunidades',
+      description:
+        'Todas las comunidades de Taringa: buscá por categoría o por nombre y sumate a las que te interesen.',
+      type: 'website',
+      imageURL: '',
+      tags: ['comunidades', 'explorar', 'taringa'],
+    });
+
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
     this.loadCategorias();
-    this.loadComunidades();
+
+    // La pagina vive en ?page= para que sea enlazable y rastreable.
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.page = Number(params.get('page')) || 1;
+        this.loadComunidades();
+      });
   }
 
   loadCategorias(): void {
@@ -68,9 +89,17 @@ export class ComunidadesExplorarComponent implements OnInit {
     this.loadComunidades();
   }
 
+  queryParamsPara(pagina: number): any {
+    return pagina <= 1 ? { page: null } : { page: pagina };
+  }
+
   goToPage(page: number): void {
-    this.page = page;
-    this.loadComunidades();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.queryParamsPara(page),
+      queryParamsHandling: 'merge',
+    });
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 

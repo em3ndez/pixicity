@@ -6,6 +6,7 @@ import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.inter
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -25,7 +26,8 @@ export class ShoutsViewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private perfilService: IHttpPerfilService,
     private snackBar: MatSnackBar,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private seoService: SEOService
   ) {
     this.displayService.setDisplay({
       mainMenu: true,
@@ -55,6 +57,34 @@ export class ShoutsViewComponent implements OnInit {
 
     this.perfilService.getShoutById(shoutId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.shout = value;
+
+      if (this.shout) {
+        const texto = (this.shout.contenido || '')
+          .replace(/<[^>]*>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        const autor = this.shout.usuario?.userName ?? '';
+
+        this.seoService.setSEO({
+          title: texto ? texto.substring(0, 60) : `Shout de ${autor}`,
+          description: texto
+            ? texto.substring(0, 200)
+            : `Shout de ${autor} en Taringa.`,
+          type: 'article',
+          imageURL: '',
+          tags: [autor, 'shout', 'taringas'].filter(Boolean),
+          canonical: `${location.origin}${location.pathname}`,
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@type': 'SocialMediaPosting',
+            headline: texto ? texto.substring(0, 110) : `Shout de ${autor}`,
+            datePublished: this.shout.fechaRegistro,
+            author: { '@type': 'Person', name: autor },
+            publisher: { '@id': `${location.origin}/#organization` },
+            mainEntityOfPage: { '@type': 'WebPage', '@id': `${location.origin}${location.pathname}` },
+          },
+        });
+      }
       
       if(!this.shout) {
         window.location.href = '';

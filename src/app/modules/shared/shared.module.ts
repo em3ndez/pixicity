@@ -17,6 +17,7 @@ import { UserAvatarComponent } from '../../components/addons/user-avatar/user-av
 import { WhoIsIpComponent } from '../../components/addons/who-is-ip/who-is-ip.component';
 import { TimeAgoPipe } from '../../shared/pipes/timeAgo.pipe';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { ContenidoSeoPipe } from '../../shared/pipes/contenidoSeo.pipe';
 import { BanearUsuarioComponent } from '../../components/admin/usuarios/usuarios/banear-usuario/banear-usuario.component';
 import { ChangeAvatarComponent } from '../../components/admin/usuarios/usuarios/change-avatar/change-avatar.component';
 import { ChangeRangoComponent } from '../../components/admin/usuarios/rangos/change-rango/change-rango.component';
@@ -44,6 +45,7 @@ const SHARED = [
   // Pipes
   TimeAgoPipe,
   TruncatePipe,
+  ContenidoSeoPipe,
   // Cross-context admin components
   BanearUsuarioComponent,
   ChangeAvatarComponent,

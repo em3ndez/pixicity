@@ -63,8 +63,8 @@
       @if (pagination.totalPages > 1) {
       <div class="fotos-pagination">
         @for (page of totalPages; track page) {
-        <a class="page-btn" [ngClass]="{'active': page === pagination.currentPage}"
-          (click)="goToPage(page)">{{page}}</a>
+        <a class="page-btn" [ngClass]="{'active': page === pagination.currentPage}" [routerLink]="[]"
+          [queryParams]="queryParamsPara(page)" queryParamsHandling="merge">{{page}}</a>
         }
       </div>
       }

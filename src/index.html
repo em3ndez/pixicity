@@ -11,6 +11,18 @@
   <meta name="author" content="Gorgoroth" />
   <meta name="robots" content="index, follow, archive" />
 
+  <!-- Prerender (bots): el server de prerender espera a que la app marque -->
+  <!-- prerenderReady=true (SEOService) antes de capturar el HTML. Sin esto -->
+  <!-- Googlebot recibia el shell vacio y no indexaba nada. -->
+  <script>window.prerenderReady = false;</script>
+
+  <link rel="canonical" href="https://taringas.net/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Taringa! - Inteligencia colectiva" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:description"
+    content="Bienvenido a la comunidad de Taringa! Descubri y comparti informacion, videos, imagenes y memes en nuestra plataforma" />
   <meta property="og:title" content="Taringa - Inteligencia colectiva | Comunidad para compartir información" />
   <meta property="og:url" content="https://taringas.net" />
   <meta property="og:image" content="https://taringas.net/assets/images/avatar.png" />
@@ -19,6 +31,10 @@
   <meta name="twitter:description"
     content="Bienvenido a la comunidad de Taringa! Descubrí y compartí información, videos, imágenes y memes en nuestra plataforma ¡Te esperamos!">
   <meta name="twitter:image" content="https://taringas.net/assets/images/avatar.png">
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Taringa!" />
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image:alt" content="Taringa!">
 
@@ -41,12 +57,51 @@
   <link rel="manifest" href="/assets/favicon/manifest.json">
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="/assets/favicon/ms-icon-144x144.png">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
 
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <!-- Material Icons ahora se sirve localmente vía material-icons (styles.scss), no desde CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="alternate" type="application/rss+xml" title="Taringa! - Posts recientes" href="/rss" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- La hoja de fuentes se carga sin bloquear el render: llega como print y
+       pasa a all cuando termina. El <noscript> cubre a quien no tenga JS. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+    media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
+  </noscript>
+  <!-- Material Icons y Tabler se sirven localmente desde styles.scss, no desde CDN -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://taringas.net/#website",
+        "url": "https://taringas.net/",
+        "name": "Taringa!",
+        "alternateName": "Taringa - Inteligencia colectiva",
+        "inLanguage": "es",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://taringas.net/buscar?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://taringas.net/#organization",
+        "name": "Taringa!",
+        "url": "https://taringas.net/",
+        "logo": "https://taringas.net/assets/images/avatar.png"
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>

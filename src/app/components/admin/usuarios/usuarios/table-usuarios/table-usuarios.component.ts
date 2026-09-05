@@ -1,4 +1,3 @@
-import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 import { DialogBanUserComponent } from 'src/app/components/dialogs/dialog-ban-user/dialog-ban-user.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -85,7 +84,11 @@ export class TableUsuariosComponent implements OnInit {
     this.getUsuarios();
   }
 
-  changeAvatar(usuario: any): void {
+  async changeAvatar(usuario: any): Promise<void> {
+    const { DialogChangeAvatarComponent } = await import(
+      'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component'
+    );
+
     this.dialog.open(DialogChangeAvatarComponent, {
       width: '350px',
       disableClose: true,

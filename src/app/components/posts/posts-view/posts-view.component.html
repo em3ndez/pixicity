@@ -33,7 +33,7 @@
         </div>
 
         <div class="contenido">
-          <span [innerHTML]="post?.contenido"></span>
+          <span [innerHTML]="post?.contenido | contenidoSeo:post?.titulo"></span>
         </div>
       </main>
 

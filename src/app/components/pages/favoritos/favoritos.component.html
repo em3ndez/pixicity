@@ -35,7 +35,7 @@
                         title="{{favorito.post.titulo}}">
                         <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}"
                           title="{{favorito.post.categoria.nombre}}"
-                          alt="{{favorito.post.categoria.nombre}}" />
+                          alt="{{favorito.post.categoria.nombre}}" loading="lazy"/>
                           {{favorito.post.titulo}}
                         </a>
                       </td>
@@ -92,7 +92,7 @@
                     <a href="javascript:void(0)" (click)="filterByCategory(categoria)"
                       title="{{categoria.categoria.nombre}}">
                       <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
-                        alt="{{categoria.categoria.nombre}}" />
+                        alt="{{categoria.categoria.nombre}}" loading="lazy"/>
                         {{categoria.categoria.nombre}} <span
                       class="badge bg-secondary float-end">{{categoria.count}}</span>
                     </a>

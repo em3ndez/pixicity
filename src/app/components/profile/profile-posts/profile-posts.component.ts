@@ -3,6 +3,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   standalone: false,
@@ -29,15 +30,45 @@ export class ProfilePostsComponent implements OnInit {
 
   public posts: any[] = [];
   public totalCount: number = 0;
+  public pageIndex: number = 0;
 
   constructor(
     public paginationService: PaginationService,
-    private postService: IHttpPostsService
+    private postService: IHttpPostsService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Los posts viejos de un perfil no tenian ningun enlace entrante: la
+    // pagina pasa a vivir en ?page= y el paginador navega en vez de recargar.
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        const page = Number(params.get('page')) || 1;
+        this.pageIndex = Math.max(0, page - 1);
+        this.paginationService.change({
+          pageIndex: this.pageIndex,
+          pageSize: this.paginationService.pageCount,
+          length: this.totalCount,
+        });
+
+        if (this.user) {
+          this.getPosts();
+        }
+      });
+  }
+
+  queryParamsPara(pagina: number): any {
+    return pagina <= 1 ? { page: null } : { page: pagina };
+  }
+
+  get totalPaginas(): number[] {
+    const total = Math.ceil(this.totalCount / (this.paginationService.pageCount || 10));
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
 
   getPosts(): void {
     this.postService
@@ -50,7 +81,10 @@ export class ProfilePostsComponent implements OnInit {
   }
 
   pageChange(event: PageEvent): void {
-    this.paginationService.change(event);
-    this.getPosts();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.queryParamsPara(event.pageIndex + 1),
+      queryParamsHandling: 'merge',
+    });
   }
 }

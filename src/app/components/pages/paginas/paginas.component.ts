@@ -3,6 +3,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -19,7 +20,8 @@ export class PaginasComponent implements OnInit {
   constructor(
     private displayService: DisplayComponentService,
     private activatedRoute: ActivatedRoute,
-    private webService: IHttpWebService
+    private webService: IHttpWebService,
+    private seoService: SEOService
   ) {
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
       this.slug = params.params.slug;
@@ -47,8 +49,35 @@ export class PaginasComponent implements OnInit {
             ? response.fechaActualiza
             : response.fechaRegistro;
           this.pagina = response;
+
+          const limpio = (response.contenido || '')
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          this.seoService.setSEO({
+            title: response.titulo,
+            description: limpio
+              ? limpio.substring(0, 160)
+              : `${response.titulo} - Taringa`,
+            type: 'website',
+            imageURL: '',
+            tags: [response.titulo, 'taringa'],
+            canonical: `${location.origin}${location.pathname}`,
+          });
           return;
         }
+
+        // Slug inexistente: 404 real, no una pagina vacia con status 200.
+        this.seoService.setSEO({
+          title: 'Página no encontrada',
+          description: 'La página que buscás no existe.',
+          type: 'website',
+          imageURL: '',
+          tags: [],
+          noIndex: true,
+          statusCode: 404,
+        });
       });
   }
 }

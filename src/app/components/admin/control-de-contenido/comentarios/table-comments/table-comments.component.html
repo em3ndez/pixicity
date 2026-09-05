@@ -32,7 +32,7 @@
               <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
                 title="{{comment.post.titulo}}">
                 <img src="/assets/images/categorias/{{comment.post.categoria.icono}}" title="{{comment.post.categoria.nombre}}"
-                  alt="{{comment.post.categoria.nombre}}" />
+                  alt="{{comment.post.categoria.nombre}}" loading="lazy"/>
                   {{comment.post.titulo | truncate:[70]}}
                 </a>
               </td>

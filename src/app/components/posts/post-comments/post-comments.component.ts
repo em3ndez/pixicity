@@ -1,5 +1,4 @@
 import { DialogDisplayHistoryCommentsComponent } from 'src/app/components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
-import { BottomSheetsEmojisComponent } from 'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -295,8 +294,12 @@ export class PostCommentsComponent implements OnInit {
     });
   }
 
-  emojiBottomSheet(): void {
-    // displayEmojis = !displayEmojis
+  async emojiBottomSheet(): Promise<void> {
+    // El picker se descarga recien al abrirlo: no entra en el bundle inicial.
+    const { BottomSheetsEmojisComponent } = await import(
+      'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component'
+    );
+
     const ref = this.bottomSheet.open(BottomSheetsEmojisComponent, {
       closeOnNavigation: true,
     });

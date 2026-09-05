@@ -22,7 +22,7 @@
                         <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
                           title="{{post.titulo}}">
                           <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                            title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                            title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                             {{post.titulo | truncate:[65]}}
                           </a>
                         </div>
@@ -56,7 +56,7 @@
                           <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
                             title="{{post.titulo}}">
                             <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                              title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                              title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                               {{post.titulo | truncate:[65]}}
                             </a>
                           </div>
@@ -93,7 +93,7 @@
                             <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
                               title="{{post.titulo}}">
                               <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                                title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                                title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                                 {{post.titulo | truncate:[65]}}
                               </a>
                             </div>
@@ -127,7 +127,7 @@
                               <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
                                 title="{{post.titulo}}">
                                 <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                                  title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                                  title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                                   {{post.titulo | truncate:[65]}}
                                 </a>
                               </div>
@@ -161,13 +161,13 @@
                     (change)="getTopPosts(date)">
                     <ng-template appSelectLabel let-item="item">
                       <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                        [src]="'/assets/images/categorias/' + item?.icono" />
+                        [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
                         {{item.nombre}}
                       </ng-template>
 
                       <ng-template appSelectOption let-item="item" let-index="index">
                         <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                          [src]="'/assets/images/categorias/' + item?.icono" />
+                          [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
                           {{item.nombre}}
                         </ng-template>
                       </app-select>

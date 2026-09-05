@@ -19,7 +19,7 @@
       <h3>
         <span>{{comentarios?.length}}</span> comentarios - {{post?.titulo}}
       </h3>
-      <img src="/assets/images/min-carga.gif" id="com_gif" style="display: none;">
+      <img src="/assets/images/min-carga.gif" id="com_gif" style="display: none;" alt="" aria-hidden="true">
     </div>
 
     @if (comentarios?.length > 1) {
@@ -304,7 +304,7 @@
                 [userName]="currentUser?.usuario?.userName" [width]="48"
               matTooltip="Avatar de {{currentUser?.usuario?.userName}}" [matTooltipPosition]="'left'"></app-user-avatar>
               <div id="gif_cargando" style="display: none;margin:10px 3px 0 3px;">
-                <img src="/assets/images/min-carga.gif">
+                <img src="/assets/images/min-carga.gif" alt="" aria-hidden="true">
               </div>
             </div>
             <div class="Container">

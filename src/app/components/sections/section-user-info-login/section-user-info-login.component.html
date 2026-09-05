@@ -133,7 +133,7 @@
                           title="{{favorito.post.titulo}}">
                           <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}"
                             title="{{favorito.post.categoria.nombre}}"
-                            alt="{{favorito.post.categoria.nombre}}" />
+                            alt="{{favorito.post.categoria.nombre}}" loading="lazy"/>
                             {{favorito.post.titulo | truncate:[44]}}
                           </a>
                         </li>
@@ -148,7 +148,7 @@
                     <app-user-avatar [class]="'avamu'" [avatar]="currentUser.usuario?.avatar"
                     [userName]="currentUser.usuario?.userName" [height]="20"></app-user-avatar>
                     <span>{{currentUser.usuario?.userName}}</span>
-                    <img class="punti" src="/assets/images/ui/arrowd.png" />
+                    <img class="punti" src="/assets/images/ui/arrowd.png" alt="" aria-hidden="true"/>
                   </a>
                   <div class="menuver" style="top: 16px; z-index: 1;" [style.display]="displayMenu ? 'block' : 'none'"
                     (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">

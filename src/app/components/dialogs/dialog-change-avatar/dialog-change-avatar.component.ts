@@ -1,12 +1,16 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
+// Standalone + import() diferido: el cropper solo se usa en el panel de admin.
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [ImageCropperComponent, MatButtonModule, MatDialogModule],
   selector: 'app-dialog-change-avatar',
   templateUrl: './dialog-change-avatar.component.html',
   styleUrls: ['./dialog-change-avatar.component.scss'],

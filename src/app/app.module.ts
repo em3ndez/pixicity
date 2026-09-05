@@ -111,11 +111,7 @@ import { PerfilUserFollowersComponent } from './components/pages/perfil/perfil-u
 import { TagsCloudComponent } from './components/addons/tags-cloud/tags-cloud.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { PostPrivadoComponent } from './components/posts/post-privado/post-privado.component';
-import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
-import { ImageCropperComponent } from 'ngx-image-cropper';
-import { DialogChangeAvatarComponent } from './components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { HomeLastRegisteredUsersComponent } from './components/home/home-last-registered-users/home-last-registered-users.component';
 import { HomeTopCategoriasComponent } from './components/home/home-top-categorias/home-top-categorias.component';
 import { ProfileActivityComponent } from './components/profile/profile-activity/profile-activity.component';
@@ -223,8 +219,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     TagsCloudComponent,
     MiHomeComponent,
     PostPrivadoComponent,
-    BottomSheetsEmojisComponent,
-    DialogChangeAvatarComponent,
     HomeLastRegisteredUsersComponent,
     HomeTopCategoriasComponent,
     ProfileActivityComponent,
@@ -320,9 +314,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     MatCardModule,
     MatDividerModule,
     MatExpansionModule,
-    PickerModule,
     MatBottomSheetModule,
-    ImageCropperComponent,
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,

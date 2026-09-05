@@ -27,6 +27,8 @@ export class ComunidadViewComponent implements OnInit {
   public verMas: boolean = false;
   public slug: string = '';
   public queryTemas: string = '';
+  public pageTemas: number = 1;
+  public paginationTemas: any = {};
 
   constructor(
     private displayService: DisplayComponentService,
@@ -46,6 +48,20 @@ export class ComunidadViewComponent implements OnInit {
       this.slug = params['slug'];
       this.loadComunidad();
     });
+
+    // ?page= sobre el listado de temas: antes solo se veian los 20 primeros y
+    // el resto no tenia ningun enlace entrante.
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const page = Number(params.get('page')) || 1;
+      if (page === this.pageTemas) {
+        return;
+      }
+
+      this.pageTemas = page;
+      if (this.comunidad?.id) {
+        this.loadTemas();
+      }
+    });
   }
 
   loadComunidad(): void {
@@ -60,23 +76,72 @@ export class ComunidadViewComponent implements OnInit {
           type: 'website',
           imageURL: this.comunidad.imagen || this.comunidad.avatar || '',
           tags: [this.comunidad.nombre, 'comunidad', 'taringas'],
+          canonical: `${location.origin}${location.pathname}`,
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@graph': [{
+              '@type': 'CollectionPage',
+              name: this.comunidad.nombre,
+              description: this.comunidad.descripcion || undefined,
+              url: `${location.origin}${location.pathname}`,
+              image: this.comunidad.imagen || this.comunidad.avatar || undefined,
+              isPartOf: { '@id': `${location.origin}/#website` },
+              dateCreated: this.comunidad.fechaRegistro,
+            }, {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
+                { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${location.origin}/comunidades` },
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: this.comunidad.nombre,
+                  item: `${location.origin}${location.pathname}`,
+                },
+              ],
+            }],
+          },
         });
         this.loadTemas();
         this.loadMiembros();
         this.loadTopTemas();
         this.loadComentariosRecientes();
       },
-      error: () => { this.loading = false; this.router.navigate(['/comunidades']); },
+      error: () => {
+        this.loading = false;
+        this.seoService.setSEO({
+          title: 'Comunidad no encontrada',
+          description: 'Esta comunidad no existe o fue eliminada.',
+          type: 'website',
+          imageURL: '',
+          tags: [],
+          noIndex: true,
+          statusCode: 404,
+        });
+      },
     });
   }
 
   loadTemas(): void {
-    this.comunidadesService.getTemas(this.comunidad.id, { page: 1, pageCount: 20, query: this.queryTemas })
-      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r: any) => (this.temas = r?.data ?? []));
+    this.comunidadesService.getTemas(this.comunidad.id, { page: this.pageTemas, pageCount: 20, query: this.queryTemas })
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r: any) => {
+        this.temas = r?.data ?? [];
+        this.paginationTemas = r?.pagination ?? {};
+      });
   }
 
   buscarTemas(): void {
+    this.pageTemas = 1;
     this.loadTemas();
+  }
+
+  queryParamsPara(pagina: number): any {
+    return pagina <= 1 ? { page: null } : { page: pagina };
+  }
+
+  get totalPaginasTemas(): number[] {
+    const total = this.paginationTemas?.totalPages || 0;
+    return Array.from({ length: total }, (_, i) => i + 1);
   }
 
   loadMiembros(): void {

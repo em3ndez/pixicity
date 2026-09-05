@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
-        <img class="noim" src="/assets/images/404graph.png">
+        <img class="noim" src="/assets/images/404graph.png" alt="" aria-hidden="true">
       </div>
     </div>
   }
@@ -116,15 +116,13 @@
               (change)="getEstadosByPais($event)" (opened)="onFocus('pais')" (closed)="removePopover()">
               <ng-template appSelectOption let-item="item" let-index="index">
                 @if (item?.iso2) {
-                  <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1"
-                    >
+                  <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
                 }
                 {{item.nombre}}
               </ng-template>
               <ng-template appSelectLabel let-item="item">
                 @if (item?.iso2) {
-                  <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1"
-                    >
+                  <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
                 }
                 {{item.nombre}}
               </ng-template>

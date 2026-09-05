@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 interface AccionEnVivo {
   usuario: string;
@@ -35,8 +36,18 @@ export class EnVivoComponent implements OnInit, OnDestroy {
 
   constructor(
     private displayService: DisplayComponentService,
-    private signalrService: SignalrService
+    private signalrService: SignalrService,
+    private seoService: SEOService
   ) {
+    this.seoService.setSEO({
+      title: 'En vivo | Actividad de la comunidad',
+      description:
+        'Lo que está pasando ahora mismo en Taringa: posts, comentarios y votos de la comunidad en tiempo real.',
+      type: 'website',
+      imageURL: '',
+      tags: ['en vivo', 'actividad', 'taringa'],
+    });
+
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

@@ -83,13 +83,13 @@
             placeholder="Selecciona un país (opcional)">
             <ng-template appSelectOption let-item="item">
               @if (item?.iso2) {
-              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
+              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
               }
               {{ item.nombre }}
             </ng-template>
             <ng-template appSelectLabel let-item="item">
               @if (item?.iso2) {
-              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
+              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
               }
               {{ item.nombre }}
             </ng-template>

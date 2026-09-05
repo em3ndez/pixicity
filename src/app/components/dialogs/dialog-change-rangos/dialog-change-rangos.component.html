@@ -12,14 +12,13 @@
           <app-select [items]="rangos" formControlName="id" bindLabel="nombre" bindValue="id">
             <ng-template appSelectLabel let-item="item">
               @if (item.icono) {
-                <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1"
-                  >
+                <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
               }
               <span [ngStyle]="{'color': item.color}">{{item.nombre ? item.nombre : item | json}}</span>
             </ng-template>
 
             <ng-template appSelectOption let-item="item" let-index="index">
-              <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1">
+              <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
               <span [ngStyle]="{'color': item.color}">{{item.nombre}}</span>
             </ng-template>
           </app-select>

@@ -45,7 +45,7 @@
                       <section class="col-12 col-sm-12 col-md-11">
                         <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
                           <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                            alt="{{post.categoria.nombre}}" />
+                            alt="{{post.categoria.nombre}}" loading="lazy"/>
                             {{post.titulo}}
                           </a>
                           <p class="info mt-1">
@@ -85,12 +85,12 @@
                 <app-select [items]="categorias" bindLabel="nombre" bindValue="seo" formControlName="categoria">
                   <ng-template appSelectLabel let-item="item">
                     <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                      [src]="'/assets/images/categorias/' + item?.icono" />
+                      [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
                       {{item.nombre}}
                     </ng-template>
                     <ng-template appSelectOption let-item="item" let-index="index">
                       <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                        [src]="'/assets/images/categorias/' + item?.icono" />
+                        [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
                         {{item.nombre}}
                       </ng-template>
                     </app-select>

@@ -40,18 +40,20 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   ) {
     this.sessionOnlineUser();
 
+    this.setSeoHome();
+  }
+
+  private setSeoHome(): void {
     this.seoService.setSEO({
       title:
         'Taringa - Inteligencia colectiva | Comunidad para Compartir Información',
-      description: '',
-      tags: [],
-      type: 'Red social',
+      description:
+        'Comunidad para compartir información: posts, comunidades, fotos y debates. Descubrí lo que publica la gente en Taringa y sumate a la conversación.',
+      tags: ['taringa', 'comunidad', 'posts', 'memes', 'foros'],
+      // 'website' es el unico og:type valido para una portada.
+      type: 'website',
       imageURL: '',
     });
-
-    this.title.setTitle(
-      'Taringa - Inteligencia colectiva | Comunidad para Compartir Información'
-    );
   }
 
   ngOnInit(): void {
@@ -59,6 +61,10 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
 
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
       this.categoria = params.get('categoria');
+      // /posts/:categoria usa este mismo componente: sin esto todas las
+      // categorias compartian title y description con la portada y Google
+      // las colapsaba como duplicados.
+      this.setSeoCategoria(this.categoria);
     });
 
     this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
@@ -74,6 +80,27 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
             }
           });
       }
+    });
+  }
+
+  private setSeoCategoria(categoria: string): void {
+    if (!categoria) {
+      this.setSeoHome();
+      return;
+    }
+
+    const nombre = categoria
+      .split('-')
+      .filter(Boolean)
+      .map((palabra) => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+      .join(' ');
+
+    this.seoService.setSEO({
+      title: `${nombre} | Posts de la comunidad`,
+      description: `Los últimos posts de ${nombre} en Taringa: lo que publica y comenta la comunidad, ordenado por lo más reciente.`,
+      tags: [nombre.toLowerCase(), 'posts', 'taringa', 'comunidad'],
+      type: 'website',
+      imageURL: '',
     });
   }
 

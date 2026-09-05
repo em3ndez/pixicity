@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -8,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PostPrivadoComponent implements OnInit {
 
-  constructor() { }
+  constructor(private seoService: SEOService) { }
 
   ngOnInit(): void {
+    this.seoService.setSEO({
+      title: 'Post privado',
+      description: 'Este post es privado.',
+      type: 'website',
+      imageURL: '',
+      tags: [],
+      noIndex: true,
+      statusCode: 403,
+    });
   }
 
 }

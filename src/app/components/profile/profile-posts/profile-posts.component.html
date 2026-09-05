@@ -25,7 +25,7 @@
               <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
                 title="{{post.titulo}}">
                 <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                  alt="{{post.categoria.nombre}}" />
+                  alt="{{post.categoria.nombre}}" loading="lazy"/>
                   {{post.titulo}}
                 </a>
               </td>
@@ -42,6 +42,15 @@
     </main>
   }
 
-  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" [pageIndex]="pageIndex"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
   </mat-paginator>
+
+  @if (totalPaginas.length > 1) {
+    <nav class="seo-pagination" aria-label="Paginación de posts">
+      @for (p of totalPaginas; track p) {
+        <a [routerLink]="[]" [queryParams]="queryParamsPara(p)" queryParamsHandling="merge"
+          [attr.aria-current]="p === pageIndex + 1 ? 'page' : null">{{ p }}</a>
+      }
+    </nav>
+  }

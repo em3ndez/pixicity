@@ -80,14 +80,113 @@ export class PostsViewComponent implements OnInit {
         ? value.post.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)
         : value.post.titulo;
 
+      const imagen = this.primeraImagen(value.post.contenido);
+
+      // El post se carga solo por id: /posts/lo-que-sea/123/cualquier-cosa
+      // devuelve el mismo contenido. Sin una ruta canonica fija, cualquiera
+      // puede generar duplicados ilimitados enlazando mal.
+      const rutaCanonica = this.router
+        .createUrlTree(['/posts', value.post.categoria?.seo, postId, value.post.url])
+        .toString();
+      const canonical = `${location.origin}${rutaCanonica}`;
+
+      if (this.rutaDistinta(rutaCanonica)) {
+        this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
+        return;
+      }
+
       this.seoService.setSEO({
         title: value.post.titulo,
         description,
         tags: value.post.tags,
-        type: value.post.categoria.nombre,
-        imageURL: '',
+        // og:type solo acepta valores del vocabulario Open Graph, no la categoria.
+        type: 'article',
+        imageURL: imagen,
+        canonical,
+        publishedTime: value.post.fechaRegistro,
+        modifiedTime: value.post.fechaActualiza ?? value.post.fechaRegistro,
+        author: value.post.usuario?.userName,
+        section: value.post.categoria?.nombre,
+        jsonLd: {
+          '@context': 'https://schema.org',
+          '@graph': [{
+          '@type': 'Article',
+          headline: value.post.titulo,
+          description,
+          articleSection: value.post.categoria?.nombre,
+          keywords: (value.post.tags ?? []).join(', '),
+          datePublished: value.post.fechaRegistro,
+          dateModified: value.post.fechaActualiza ?? value.post.fechaRegistro,
+          image: imagen ? [imagen] : undefined,
+          author: {
+            '@type': 'Person',
+            name: value.post.usuario?.userName ?? 'Taringa!',
+            url: value.post.usuario?.userName
+              ? `${location.origin}/perfil/${value.post.usuario.userName}`
+              : undefined,
+          },
+          publisher: { '@id': `${location.origin}/#organization` },
+          mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+          commentCount: value.post.cantidadComentarios ?? undefined,
+          comment: this.comentariosJsonLd(value.post),
+        }, this.breadcrumb(value.post, canonical)],
+        },
       });
     });
+  }
+
+  /** Compara la ruta visitada con la canonica, sin que la codificacion moleste. */
+  private rutaDistinta(rutaCanonica: string): boolean {
+    const actual = decodeURIComponent(location.pathname);
+    const esperada = decodeURIComponent(rutaCanonica.split('?')[0]);
+
+    return actual !== esperada;
+  }
+
+  /**
+   * Los comentarios son el contenido diferencial del post; sin esto Google
+   * no ve que la pagina tiene debate. Se acotan para no inflar el HTML.
+   */
+  private comentariosJsonLd(post: any): any[] | undefined {
+    const comentarios: any[] = post.comentarios ?? [];
+    if (!comentarios.length) {
+      return undefined;
+    }
+
+    return comentarios.slice(0, 10).map((c) => ({
+      '@type': 'Comment',
+      text: (c.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 500),
+      dateCreated: c.fechaComentario ?? c.fechaRegistro,
+      author: { '@type': 'Person', name: c.usuario?.userName ?? 'Anónimo' },
+    }));
+  }
+
+  /** Migas Inicio > Categoria > Post: Google las muestra en lugar de la URL cruda. */
+  private breadcrumb(post: any, canonical: string): any {
+    return {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: post.categoria?.nombre,
+          item: `${location.origin}/posts/${post.categoria?.seo}`,
+        },
+        { '@type': 'ListItem', position: 3, name: post.titulo, item: canonical },
+      ],
+    };
+  }
+
+  /** Primera imagen del contenido: sirve como og:image y como image del JSON-LD. */
+  private primeraImagen(contenido: string): string {
+    const match = /<img[^>]+src=["']([^"']+)["']/i.exec(contenido ?? '');
+    if (!match) {
+      return '';
+    }
+
+    const src = match[1];
+    return src.startsWith('http') ? src : `${location.origin}${src.startsWith('/') ? '' : '/'}${src}`;
   }
 
   actualizarPost(): void {

@@ -282,3 +282,24 @@
     .tt-views { font-size: 11px; color: #999; white-space: nowrap; }
   }
 }
+
+.com-temas__pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+
+  a {
+    padding: 4px 10px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 4px;
+    font-size: 13px;
+    text-decoration: none;
+
+    &.active {
+      font-weight: 600;
+      border-color: currentColor;
+    }
+  }
+}

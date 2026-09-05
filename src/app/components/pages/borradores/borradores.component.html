@@ -30,7 +30,7 @@
                     <td>
                       <a [routerLink]="['/posts/actualizar/' + borrador.id]" title="{{borrador.titulo}}">
                         <img src="/assets/images/categorias/{{borrador.categoria.icono}}"
-                          title="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" />
+                          title="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" loading="lazy"/>
                           {{borrador.titulo}}
                         </a>
                       </td>
@@ -78,7 +78,7 @@
                     <a href="javascript:void(0)" (click)="filterByCategory(categoria)"
                       title="{{categoria.categoria.nombre}}">
                       <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
-                        alt="{{categoria.categoria.nombre}}" />
+                        alt="{{categoria.categoria.nombre}}" loading="lazy"/>
                         {{categoria.categoria.nombre}} <span
                       class="badge bg-secondary float-end">{{categoria.count}}</span>
                     </a>

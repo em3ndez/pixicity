@@ -5,6 +5,17 @@ Allow: /
 Disallow: /admin
 Disallow: /perfil/configuracion
 Disallow: /crear/
-Disallow: /buscar?
+Disallow: /buscar
+Disallow: /posts/404
+Disallow: /posts/privado
+Disallow: /login
+Disallow: /registro
+Disallow: /mensajes
+Disallow: /cuenta
+Disallow: /favoritos
+Disallow: /borradores
+Disallow: /mi
+Disallow: /monitor
+Disallow: /administracion
 
 Sitemap: https://taringas.net/sitemap.xml

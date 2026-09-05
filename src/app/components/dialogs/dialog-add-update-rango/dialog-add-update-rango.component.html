@@ -20,7 +20,7 @@
 
                     <app-select [items]="iconos" formControlName="icono">
                         <ng-template appSelectOption let-item="item" let-index="index">
-                            <img src="/assets/images/icons/rangos/{{item}}" class="image-middle me-1">
+                            <img src="/assets/images/icons/rangos/{{item}}" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
                             {{item}}
                         </ng-template>
                     </app-select>

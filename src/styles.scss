@@ -4,6 +4,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import "material-icons/iconfont/material-icons.css";
+// Tabler local y con version fija: antes venia de jsdelivr con @latest, que
+// bloqueaba el render y podia romperse solo en cualquier release.
+@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
 @import "animate.css";
 
 // CDK overlay: ensure user popover renders above everything

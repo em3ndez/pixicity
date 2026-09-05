@@ -105,12 +105,12 @@
             placeholder="Elige una categoría">
             <ng-template appSelectLabel let-item="item">
               <img class="image-middle" style="margin-right: 4px;" height="15" width="15"
-                [src]="'/assets/images/categorias/' + item.icono" />
+                [src]="'/assets/images/categorias/' + item.icono" alt="" aria-hidden="true"loading="lazy"/>
               {{ item.nombre }}
             </ng-template>
             <ng-template appSelectOption let-item="item">
               <img class="image-middle" style="margin-right: 4px;" height="15" width="15"
-                [src]="'/assets/images/categorias/' + item.icono" />
+                [src]="'/assets/images/categorias/' + item.icono" alt="" aria-hidden="true"loading="lazy"/>
               {{ item.nombre }}
             </ng-template>
           </app-select>

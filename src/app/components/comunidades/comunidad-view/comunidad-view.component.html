@@ -115,6 +115,18 @@
                 </li>
               }
             </ul>
+
+            @if (totalPaginasTemas.length > 1) {
+              <!-- Enlaces reales: el listado de temas viejos necesita rutas
+                   que Googlebot pueda seguir, no botones. -->
+              <nav class="com-temas__pagination" aria-label="Paginación de temas">
+                @for (p of totalPaginasTemas; track p) {
+                  <a [routerLink]="[]" [queryParams]="queryParamsPara(p)" queryParamsHandling="merge"
+                    [attr.aria-current]="p === pageTemas ? 'page' : null"
+                    [class.active]="p === pageTemas">{{p}}</a>
+                }
+              </nav>
+            }
           }
         </div>
       </div>

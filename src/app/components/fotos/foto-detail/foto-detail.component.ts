@@ -53,6 +53,15 @@ export class FotoDetailComponent implements OnInit {
       next: (response: any) => {
         this.foto = response;
         this.loading = false;
+        const rutaCanonica = this.router
+          .createUrlTree(['/fotos', this.foto.usuario, this.foto.id, this.foto.url])
+          .toString();
+
+        if (decodeURIComponent(location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
+          this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
+          return;
+        }
+
         this.seoService.setSEO({
           title: this.foto.titulo,
           description: this.foto.descripcion
@@ -61,13 +70,47 @@ export class FotoDetailComponent implements OnInit {
           type: 'article',
           imageURL: this.foto.imageUrl || '',
           tags: [this.foto.titulo, this.foto.categoria, this.foto.usuario, 'fotos', 'taringas'].filter(Boolean),
+          canonical: `${location.origin}${rutaCanonica}`,
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@graph': [{
+              '@type': 'ImageObject',
+              name: this.foto.titulo,
+              contentUrl: this.foto.imageUrl || undefined,
+              uploadDate: this.foto.fechaRegistro,
+              creditText: this.foto.usuario,
+              author: { '@type': 'Person', name: this.foto.usuario },
+              copyrightNotice: this.foto.usuario,
+              license: `${location.origin}/paginas/terminos-y-condiciones`,
+            }, {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
+                { '@type': 'ListItem', position: 2, name: 'Fotos', item: `${location.origin}/fotos` },
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: this.foto.titulo,
+                  item: `${location.origin}${location.pathname}`,
+                },
+              ],
+            }],
+          },
         });
         // Increment visit count (fire and forget)
         this.fotosService.incrementVisitas(this.fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
       },
       error: () => {
         this.loading = false;
-        this.router.navigate(['/fotos']);
+        this.seoService.setSEO({
+          title: 'Foto no encontrada',
+          description: 'Esta foto no existe o fue eliminada.',
+          type: 'website',
+          imageURL: '',
+          tags: [],
+          noIndex: true,
+          statusCode: 404,
+        });
       },
     });
   }

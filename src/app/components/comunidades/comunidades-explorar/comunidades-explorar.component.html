@@ -53,7 +53,8 @@
       @if (totalPages.length > 1) {
       <div class="com-pagination">
         @for (p of totalPages; track p) {
-        <a [class.active]="p === pagination.currentPage" (click)="goToPage(p)">{{p}}</a>
+        <a [class.active]="p === pagination.currentPage" [routerLink]="[]"
+          [queryParams]="queryParamsPara(p)" queryParamsHandling="merge">{{p}}</a>
         }
       </div>
       }

@@ -8,7 +8,7 @@
 
       <span class="op-rango" [ngStyle]="{'color': info?.rango?.color}">
         <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}" matTooltip="{{info?.rango?.nombre}}"
-          [matTooltipPosition]="'below'">
+          [matTooltipPosition]="'below'" alt="" aria-hidden="true" loading="lazy">
         <span>{{info?.rango?.nombre}}</span>
       </span>
     </div>

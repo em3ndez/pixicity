@@ -5,6 +5,17 @@ export class SEOModel {
   imageURL: string;
   tags: string[];
   canonical?: string;
+  /** JSON-LD (schema.org) especifico de la pagina. */
+  jsonLd?: any;
+  /** true => noindex,follow (paginas sin valor para buscadores). */
+  noIndex?: boolean;
+  /** Status HTTP que debe reportar el prerender (404 en paginas inexistentes). */
+  statusCode?: number;
+  /** Metadatos Open Graph de articulo (solo si type === 'article'). */
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  section?: string;
 
   constructor(
     title: string,
@@ -12,7 +23,10 @@ export class SEOModel {
     type: string,
     imageURL: string,
     tags: string[],
-    canonical?: string
+    canonical?: string,
+    jsonLd?: any,
+    noIndex?: boolean,
+    statusCode?: number
   ) {
     this.title = title;
     this.description = description;
@@ -20,5 +34,8 @@ export class SEOModel {
     this.imageURL = imageURL;
     this.tags = tags;
     this.canonical = canonical;
+    this.jsonLd = jsonLd;
+    this.noIndex = noIndex;
+    this.statusCode = statusCode;
   }
 }

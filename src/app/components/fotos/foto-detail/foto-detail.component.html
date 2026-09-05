@@ -118,7 +118,7 @@
         <!-- Contenido principal -->
         <main class="foto-main">
           <div class="foto-image-container">
-            <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-main-img">
+            <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-main-img" fetchpriority="high" decoding="async">
           </div>
 
           <h1 class="foto-main-title">{{foto.titulo}}</h1>

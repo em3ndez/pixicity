@@ -156,7 +156,9 @@ const routes: Routes = [
       import('./modules/comunidades/comunidades.module').then((m) => m.ComunidadesModule),
   },
 
-  { path: '*', redirectTo: '' },
+  // '*' no es un comodin valido en Angular (es '**'): con el anterior las URLs
+  // desconocidas no matcheaban ninguna ruta y el bot recibia una pagina rota.
+  { path: '**', component: PostNotFoundComponent },
 ];
 
 @NgModule({

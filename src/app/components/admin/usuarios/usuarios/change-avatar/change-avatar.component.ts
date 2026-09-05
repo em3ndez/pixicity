@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -22,7 +21,12 @@ export class ChangeAvatarComponent implements OnInit {
     this.currentUser = this.securityService.getCurrentUser();
   }
 
-  changeAvatar(): void {
+  async changeAvatar(): Promise<void> {
+    // El cropper (ngx-image-cropper) se carga solo cuando se abre el dialogo.
+    const { DialogChangeAvatarComponent } = await import(
+      'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component'
+    );
+
     this.dialog.open(DialogChangeAvatarComponent, {
       width: '350px',
       disableClose: true,

@@ -45,6 +45,20 @@ export class PerfilComponent implements OnInit {
 
   getUserByUserName(userName: string): void {
     this.securityService.getUserByUserName(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+      if (!value) {
+        // Perfil inexistente: 404 real para que Google no lo tome como soft 404.
+        this.seoService.setSEO({
+          title: 'Perfil no encontrado',
+          description: 'Este usuario no existe o fue dado de baja.',
+          type: 'website',
+          imageURL: '',
+          tags: [],
+          noIndex: true,
+          statusCode: 404,
+        });
+        return;
+      }
+
       this.currentUser = value;
       this.display.background = this.currentUser.profileBackground;
       this.displayService.setDisplay(this.display);
@@ -55,6 +69,32 @@ export class PerfilComponent implements OnInit {
         type: 'profile',
         imageURL: this.currentUser.avatar || '',
         tags: [this.currentUser.userName, 'perfil', 'usuario', 'taringas'],
+        canonical: `${location.origin}${location.pathname}`,
+        jsonLd: {
+          '@context': 'https://schema.org',
+          '@type': 'ProfilePage',
+          url: `${location.origin}${location.pathname}`,
+          dateCreated: this.currentUser.fechaRegistro,
+          mainEntity: {
+            '@type': 'Person',
+            name: this.currentUser.userName,
+            alternateName: this.currentUser.userName,
+            image: this.currentUser.avatar || undefined,
+            url: `${location.origin}/perfil/${this.currentUser.userName}`,
+            interactionStatistic: [
+              {
+                '@type': 'InteractionCounter',
+                interactionType: 'https://schema.org/FollowAction',
+                userInteractionCount: this.currentUser.cantidadSeguidores ?? 0,
+              },
+              {
+                '@type': 'InteractionCounter',
+                interactionType: 'https://schema.org/WriteAction',
+                userInteractionCount: this.currentUser.cantidadPosts ?? 0,
+              },
+            ],
+          },
+        },
       });
 
       if (this.loggedUser && this.loggedUser.userName !== userName) {

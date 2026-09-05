@@ -72,7 +72,7 @@
             <span class="meta">{{tema.fechaRegistro | timeAgo}} · <i class="ti ti-eye"></i> {{tema.visitantes}}</span>
           </div>
         </div>
-        <div class="tema-content" [innerHTML]="tema.contenido"></div>
+        <div class="tema-content" [innerHTML]="tema.contenido | contenidoSeo:tema.titulo"></div>
 
         <div class="tema-vote">
           <button type="button" class="tema-vote__btn up" [class.active]="tema.miVoto === 1"
@@ -179,7 +179,7 @@
           @if (c.rango?.nombre) {
           <span class="coment-rango" [ngStyle]="{ color: c.rango.color }">
             @if (c.rango.icono) {
-            <img src="/assets/images/icons/rangos/{{c.rango.icono}}" [matTooltip]="c.rango.nombre">
+            <img src="/assets/images/icons/rangos/{{c.rango.icono}}" [matTooltip]="c.rango.nombre" alt="" aria-hidden="true" loading="lazy">
             }
             {{c.rango.nombre}}
           </span>

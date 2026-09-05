@@ -27,17 +27,17 @@
             <div class="mite">
               <div class="current-user-info float-start">
                 <p style="color: #171717;font-weight: bold;">
-                  <img src="/assets/images/icons/rangos/{{usuario.rango.icono}}">
+                  <img src="/assets/images/icons/rangos/{{usuario.rango.icono}}" alt="" aria-hidden="true" loading="lazy">
                   {{usuario.rango?.nombre}}
                 </p>
                 <p>
                   <img src="/assets/images/flags/{{usuario.iso2.toLowerCase()}}.png"
-                    style="margin: 0 10px 0 0;">
+                    style="margin: 0 10px 0 0;" alt="" aria-hidden="true" loading="lazy">
                     {{usuario.pais}}
                   </p>
                   <p>
                     <img
-                      src="/assets/images/icons/{{usuario.genero === 1 ? 'male' : usuario.genero === 2 ? 'female' : 'question'}}.png">
+                      src="/assets/images/icons/{{usuario.genero === 1 ? 'male' : usuario.genero === 2 ? 'female' : 'question'}}.png" alt="" aria-hidden="true">
                       {{usuario.genero === 1 ? 'Hombre' : usuario.genero === 2 ? 'Mujer' : 'Otro'}}
                     </p>
                   </div>
@@ -122,16 +122,14 @@
               <app-select [items]="paises" bindLabel="nombre" bindValue="id" formControlName="pais">
                 <ng-template appSelectOption let-item="item" let-index="index">
                   @if (item?.iso2) {
-                    <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle"
-                      >
+                    <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle" alt="" aria-hidden="true" loading="lazy">
                   }
                   {{item.nombre}}
                 </ng-template>
 
                 <ng-template appSelectLabel let-item="item">
                   @if (item?.iso2) {
-                    <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle"
-                      >
+                    <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle" alt="" aria-hidden="true" loading="lazy">
                   }
                   {{item.nombre}}
                 </ng-template>
@@ -146,16 +144,14 @@
               <app-select [items]="rangos" bindLabel="nombre" bindValue="id" formControlName="rango">
                 <ng-template appSelectOption let-item="item" let-index="index">
                   @if (item.icono) {
-                    <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-2"
-                      >
+                    <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-2" alt="" aria-hidden="true" loading="lazy">
                   }
                   {{item.nombre}}
                 </ng-template>
 
                 <ng-template appSelectLabel let-item="item">
                   @if (item.icono) {
-                    <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-2"
-                      >
+                    <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-2" alt="" aria-hidden="true" loading="lazy">
                   }
                   {{item.nombre}}
                 </ng-template>

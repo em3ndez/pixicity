@@ -9,7 +9,7 @@
 
             <p><em>Fecha última actualización: {{pagina?.fechaActualiza | date:'medium'}}</em></p>
 
-            <span [innerHTML]="pagina?.contenido"></span>
+            <span [innerHTML]="pagina?.contenido | contenidoSeo:pagina?.titulo"></span>
 
             <br /><br />
         </div>

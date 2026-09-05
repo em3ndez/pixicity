@@ -19,7 +19,7 @@
             <td>
               @if (post.sticky) {
                 <img src="/assets/images/categorias/sticky.png" class="sticky-post--home"
-                  title="Post fijado por el Staff" alt="Sticky" />
+                  title="Post fijado por el Staff" alt="Sticky" loading="lazy"/>
               }
             </td>
             <td>
@@ -29,7 +29,7 @@
               <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
                 title="{{post.titulo}}">
                 <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                  alt="{{post.categoria.nombre}}" />
+                  alt="{{post.categoria.nombre}}" loading="lazy"/>
                   {{post.titulo}}
                 </a>
               </td>

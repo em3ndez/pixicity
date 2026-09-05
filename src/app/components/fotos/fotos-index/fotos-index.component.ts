@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -29,6 +29,7 @@ export class FotosIndexComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private fotosService: IHttpFotosService,
     private route: ActivatedRoute,
+    private router: Router,
     private seoService: SEOService
   ) {
     this.displayService.setDisplay({
@@ -64,6 +65,16 @@ export class FotosIndexComponent implements OnInit {
       );
       this.loadFotos();
     });
+
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        const page = Number(params.get('page')) || 1;
+        if (page !== this.page) {
+          this.page = page;
+          this.loadFotos();
+        }
+      });
   }
 
   loadFotos(): void {
@@ -85,9 +96,19 @@ export class FotosIndexComponent implements OnInit {
   }
 
   goToPage(page: number): void {
-    this.page = page;
-    this.loadFotos();
+    // Navegar en vez de recargar en memoria: la pagina queda en la URL y
+    // Googlebot puede seguir los enlaces al resto de la galeria.
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.queryParamsPara(page),
+      queryParamsHandling: 'merge',
+    });
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  queryParamsPara(pagina: number): any {
+    return pagina <= 1 ? { page: null } : { page: pagina };
   }
 
   get totalPages(): number[] {
