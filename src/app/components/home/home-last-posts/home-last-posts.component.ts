@@ -39,9 +39,9 @@ export class HomeLastPostsComponent implements OnInit {
     private postService: IHttpPostsService,
     private viewPort: ViewportScroller,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 42, length: 0 });
   }
 
   ngOnInit(): void {
@@ -59,7 +59,9 @@ export class HomeLastPostsComponent implements OnInit {
   }
 
   get totalPaginas(): number {
-    return Math.ceil(this.totalCount / (this.paginationService.pageCount || 10));
+    return Math.ceil(
+      this.totalCount / (this.paginationService.pageCount || 10),
+    );
   }
 
   /** Ventana de paginas alrededor de la actual, para no escupir 500 enlaces. */
@@ -69,7 +71,10 @@ export class HomeLastPostsComponent implements OnInit {
     const desde = Math.max(1, actual - 2);
     const hasta = Math.min(total, desde + 4);
 
-    return Array.from({ length: Math.max(0, hasta - desde + 1) }, (_, i) => desde + i);
+    return Array.from(
+      { length: Math.max(0, hasta - desde + 1) },
+      (_, i) => desde + i,
+    );
   }
 
   queryParamsPara(pagina: number): any {
