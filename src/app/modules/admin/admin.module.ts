@@ -96,6 +96,7 @@ import { DashboardSesionesComponent } from '../../components/admin/usuarios/sesi
 import { TableSesionesComponent } from '../../components/admin/usuarios/sesiones/table-sesiones/table-sesiones.component';
 import { DashboardUsuariosComponent } from '../../components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 
+import { AdminSparklineComponent } from '../../components/admin/shared/admin-sparkline/admin-sparkline.component';
 import { SharedModule } from '../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
 
@@ -156,6 +157,7 @@ import { AdminRoutingModule } from './admin-routing.module';
     DashboardComponent,
     DashboardAdminComponent,
     DashboardSidebarComponent,
+    AdminSparklineComponent,
     // general
     DashboardConfigurationComponent,
     DashboardAdsComponent,

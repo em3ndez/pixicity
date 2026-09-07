@@ -1,202 +1,56 @@
-<aside class="admin-menu__wrapper">
-    <h6>General</h6>
-    <ul class="list-unstyled admin-menu">
-        <li>
-            <a [routerLink]="['dashboard']" [ngClass]="{'active': currentURL === 'administracion/dashboard'}">
-                <mat-icon>home</mat-icon> Dashboard
-            </a>
-        </li>
+<button type="button" class="adm-nav__toggle" (click)="abiertoMovil = !abiertoMovil">
+  <mat-icon>{{abiertoMovil ? 'close' : 'menu'}}</mat-icon>
+  Menú de administración
+</button>
 
-        <li>
-            <a [routerLink]="['configuracion']" [ngClass]="{'active': currentURL === 'configuracion'}">
-                <mat-icon>settings</mat-icon> Configuración
-            </a>
-        </li>
+<aside class="adm-nav" [class.adm-nav--open]="abiertoMovil">
+  <div class="adm-nav__search">
+    <mat-icon>search</mat-icon>
+    <input type="text" [(ngModel)]="filtro" placeholder="Buscar sección…" aria-label="Buscar sección" />
+    @if (filtro) {
+      <button type="button" (click)="limpiarFiltro()" aria-label="Limpiar búsqueda">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </div>
 
-        <li>
-            <a [routerLink]="['publicidad']">
-                <mat-icon>payments</mat-icon> Publicidad
-            </a>
-        </li>
-    </ul>
+  @for (grupo of grupos; track grupo.titulo) {
+    @if (grupoVisible(grupo)) {
+      <section class="adm-nav__group">
+        <button type="button" class="adm-nav__grouphead" (click)="alternarGrupo(grupo)">
+          <mat-icon class="adm-nav__groupicon">{{grupo.icono}}</mat-icon>
+          <span>{{grupo.titulo}}</span>
 
-    <h6>Control de Contenido</h6>
-    <ul class="list-unstyled admin-menu">
-        <li>
-            <a [routerLink]="['posts']">
-                <mat-icon>fact_check</mat-icon> Posts
-            </a>
-        </li>
+          @if (pendientesGrupo(grupo) > 0) {
+            <span class="adm-nav__badge">{{pendientesGrupo(grupo)}}</span>
+          }
 
-        <li>
-            <a [routerLink]="['fotos']">
-                <mat-icon>photo_library</mat-icon> Fotos
-            </a>
-        </li>
+          <mat-icon class="adm-nav__chevron" [class.adm-nav__chevron--closed]="!grupoAbierto(grupo)">
+            expand_more
+          </mat-icon>
+        </button>
 
-        <li>
-            <a [routerLink]="['contacto']">
-                <mat-icon>contact_page</mat-icon> Contacto
-                @if (contactosPendientes > 0) {
-                    <span class="sidebar-badge">{{contactosPendientes}}</span>
-                }
-            </a>
-        </li>
+        @if (grupoAbierto(grupo)) {
+          <ul class="adm-nav__list">
+            @for (item of itemsVisibles(grupo); track item.ruta) {
+              <li>
+                <a [routerLink]="[item.ruta]" [class.adm-nav__link--active]="esActivo(item.ruta)">
+                  <mat-icon>{{item.icono}}</mat-icon>
+                  <span>{{item.titulo}}</span>
 
-        <li>
-            <a [routerLink]="['comentarios']">
-                <mat-icon>message</mat-icon> Comentarios
-            </a>
-        </li>
+                  @if (badge(item) > 0) {
+                    <span class="adm-nav__badge">{{badge(item)}}</span>
+                  }
+                </a>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    }
+  }
 
-        <li>
-            <a [routerLink]="['mensajes']">
-                <mat-icon>email</mat-icon> Mensajes
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['monitor']">
-                <mat-icon>notifications_active</mat-icon> Monitor
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['noticias']">
-                <mat-icon>feed</mat-icon> Noticias
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['paises']">
-                <mat-icon>flag</mat-icon> Paises
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['paginas']">
-                <mat-icon>document_scanner</mat-icon> Páginas
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['shouts']">
-                <mat-icon>question_answer</mat-icon> Shouts
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['votos']">
-                <mat-icon>how_to_vote</mat-icon> Votos
-            </a>
-        </li>
-    </ul>
-
-    <h6>Control de Taringa!</h6>
-    <ul class="list-unstyled admin-menu">
-        <li>
-            <a [routerLink]="['afiliados']">
-                <mat-icon>directions</mat-icon> Afiliados
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['bloqueos']">
-                <mat-icon>block</mat-icon> Bloqueos
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['categorias']">
-                <mat-icon>category</mat-icon> Categorías
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['comunidades-categorias']">
-                <mat-icon>groups</mat-icon> Comunidades
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['moderacion']">
-                <mat-icon>shield</mat-icon> Moderación
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['comunidades-denuncias']">
-                <mat-icon>flag</mat-icon> Denuncias comunidad
-                @if (denunciasComunidad > 0) {
-                    <span class="sidebar-badge">{{denunciasComunidad}}</span>
-                }
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['comentarios-denuncias']">
-                <mat-icon>flag</mat-icon> Denuncias comentarios
-                @if (denunciasPosts > 0) {
-                    <span class="sidebar-badge">{{denunciasPosts}}</span>
-                }
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['shouts-denuncias']">
-                <mat-icon>flag</mat-icon> Denuncias shouts
-                @if (denunciasShouts > 0) {
-                    <span class="sidebar-badge">{{denunciasShouts}}</span>
-                }
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['censuras']">
-                <mat-icon>warning</mat-icon> Censuras
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['denuncias']">
-                <mat-icon>report</mat-icon> Denuncias
-                @if (denunciasReportes > 0) {
-                    <span class="sidebar-badge">{{denunciasReportes}}</span>
-                }
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['estadisticas']">
-                <mat-icon>analytics</mat-icon> Estadísticas
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['medallas']">
-                <mat-icon>emoji_events</mat-icon> Medallas
-            </a>
-        </li>
-    </ul>
-
-    <h6>Usuarios</h6>
-    <ul class="list-unstyled admin-menu">
-        <li>
-            <a [routerLink]="['usuarios']">
-                <mat-icon>group</mat-icon> Usuarios
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['sesiones']">
-                <mat-icon>manage_accounts</mat-icon> Sesiones
-            </a>
-        </li>
-
-        <li>
-            <a [routerLink]="['rango-usuarios']">
-                <mat-icon>badge</mat-icon> Rangos de Usuarios
-            </a>
-        </li>
-    </ul>
+  @if (sinResultados) {
+    <p class="adm-nav__empty">Sin resultados para “{{filtro}}”.</p>
+  }
 </aside>

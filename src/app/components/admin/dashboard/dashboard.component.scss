@@ -1,0 +1,28 @@
+.adm-shell {
+  padding-top: 0;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  &__aside {
+    min-width: 0;
+    border-right: 1px solid #e5e8ec;
+  }
+
+  &__content {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 991px) {
+  .adm-shell__grid { grid-template-columns: 200px minmax(0, 1fr); gap: 1rem; }
+}
+
+@media (max-width: 767px) {
+  .adm-shell__grid { grid-template-columns: minmax(0, 1fr); }
+  .adm-shell__aside { border-right: 0; border-bottom: 1px solid #e5e8ec; }
+}

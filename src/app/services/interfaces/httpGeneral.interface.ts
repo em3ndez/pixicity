@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
+import { DashboardResumen } from 'src/app/models/admin/dashboard.model';
 
 @Injectable()
 export abstract class IHttpGeneralService {
   abstract getEstadisticas(): Observable<any>;
   abstract getAdminEstadisticas(): Observable<any>;
+  abstract getDashboardResumen(): Observable<DashboardResumen>;
   abstract getAfiliados(): Observable<any>;
   abstract saveAfiliacion(afiliacion: AfiliacionModel): Observable<any>;
   abstract getFavoritosByUser(

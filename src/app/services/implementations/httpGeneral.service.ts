@@ -11,6 +11,7 @@ import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
+import { DashboardResumen } from 'src/app/models/admin/dashboard.model';
 
 @Injectable()
 export class HttpGeneralService implements IHttpGeneralService {
@@ -20,6 +21,20 @@ export class HttpGeneralService implements IHttpGeneralService {
     private helper: HelperService,
     private http: HttpClient,
   ) {}
+
+  getDashboardResumen(): Observable<DashboardResumen> {
+    return this.http
+      .get<ApiResponse<DashboardResumen>>(`${environment.api}/api/dashboard/getResumen`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
 
   getAdminEstadisticas(): Observable<unknown> {
     return this.http
